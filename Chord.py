@@ -1,100 +1,98 @@
 from Node import Node
 from Utils import Utils
 
+
 class Chord:
-    def __init__(self, activeNodes: int) -> None:
-        self.__ring = []
-        self.__amountActiveNodes = activeNodes
-    
-    def getRing(self) -> list:
+
+    def __init__(self, active_nodes: int) -> None:
+        self.__ring: list[Node] = []
+        self.__amount_active_nodes: int = active_nodes
+
+    def get_ring(self) -> list:
         return self.__ring
-    
-    def setRing(self, ring: list) -> None:
+
+    def set_ring(self, ring: list) -> None:
         self.__ring = ring
-    
-    def getAmountActiveNodes(self) -> int:
-        return self.__amountActiveNodes
-    
-    def setAmountActiveNodes(self, amount: int) -> None:
-        self.__amountActiveNodes = amount
-    
-    def ringLength(self) -> int:
+
+    def get_amount_active_nodes(self) -> int:
+        return self.__amount_active_nodes
+
+    def set_amount_active_nodes(self, amount: int) -> None:
+        self.__amount_active_nodes = amount
+
+    def length(self) -> int:
         return len(self.__ring)
-    
-    def addNode(self, node: Node) -> None:
+
+    def add_node(self, node: Node) -> None:
         self.__ring.append(node)
-        # self.getRing().append(node)
-    
-    def setAssociatedNodes(self) -> None:
-        node = Node()
+
+    def set_associated_nodes(self) -> None:
         associated_nodes = {}
         first_node = -1
-        end = 0
+        # end = 0
 
         for node_index in range(len(self.__ring) - 1, -1, -1):
-            
-            node = self.__ring[node_index]
-            
-            if(node.getActiveNode()):
-                node.setAssociatedKeys(associated_nodes)
 
-                if(first_node == -1):
+            node = self.__ring[node_index]
+
+            if node.is_active():
+                node.set_associated_keys(associated_nodes)
+
+                if first_node == -1:
                     first_node = node_index
 
-            if(first_node >= 0):
+            if first_node >= 0:
                 print(associated_nodes)
-                associated_nodes.update({node.getKey(), node.getValue()})
+                associated_nodes.update({node.get_key(): node.get_value()})
                 print(associated_nodes)
-            
-            if(node_index == 0):
-                node_index = len(self.__ring)
-                end = first_node+1
-            
 
-    
-    def setNext(self):
+            if node_index == 0:
+                # end = first_node+1
+                node_index = len(self.__ring)
+
+    def next_node(self):
         previous_node = -1
         first_node = -1
-        node = Node()
-        
+
         for node_index in range(len(self.__ring)):
             node = self.__ring[node_index]
-            if node.getActiveNode():
+            if node.is_active():
                 if previous_node >= 0:
-                    self.__ring[previous_node].setNextNode(node.getKey())
+                    self.__ring[previous_node].set_next_node(node.get_key())
                 else:
-                    first_node = node.getKey()
+                    first_node = node.get_key()
 
                 previous_node = node_index
 
-        self.__ring[previous_node].setNextNode(first_node)
+        self.__ring[previous_node].set_next_node(first_node)
 
-    
-    def activateInitialNodes(self) -> None:
-        random_active_nodes = Utils().generateRandomActiveNodes(self.__amountActiveNodes)
+    def activate_initial_nodes(self) -> None:
+        random_active_nodes: list[int] = Utils(
+        ).generate_random_active_nodes(self.__amount_active_nodes)
         node = Node()
-        index = 0
-        for node_index in range(len(random_active_nodes)):
-            index = random_active_nodes[node_index]
-            node = self.__ring[index]
-            node.setActiveNode(True)
+        # for e in enumerate(random_active_nodes):
+        #     for i in e:
+        #         node = self.__ring[i]
+        #         node.active(True)
+        for index in range(len(random_active_nodes)):
+            node_index = random_active_nodes[index]
+            node = self.__ring[node_index]
+            node.active(True)
 
     def start(self) -> None:
-        self.activateInitialNodes()
-        self.setNext()
-        self.setAssociatedNodes()
+        self.activate_initial_nodes()
+        self.next_node()
+        self.set_associated_nodes()
 
-    def printRing(self) -> None:
+    def print(self) -> None:
         for node in self.__ring:
-            if(node.getActiveNode()):
-                print(f"Key: {node.getKey()}")
-                print(f"Value: {node.getValue()}")
-                print(f"Active: {node.getActiveNode()}")
-                print(f"Next: {node.getNextNode()}")
-                print(f"Associated Keys: {node.getAssociatedKeys()}")
+            if node.is_active():
+                print(f"Key: {node.get_key()}")
+                print(f"Value: {node.get_value()}")
+                print(f"Active: {node.is_active()}")
+                print(f"Next: {node.get_next_node()}")
+                print(f"Associated Keys: {node.get_associated_keys()}")
                 print("=====================================")
-        
-        print(f"Active Nodes: {self.getAmountActiveNodes()}")
+
+        print(f"Active Nodes: {self.get_amount_active_nodes()}")
         print("=====================================")
-
-
