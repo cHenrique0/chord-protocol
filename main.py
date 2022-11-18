@@ -1,20 +1,22 @@
 from Node import Node
 from Chord import Chord
+from Utils import Utils
+
+RING_SIZE = 16
+AMOUNT_ACTIVE_NODES = 4
+PATH = "./data"
+files = Utils().load_files(PATH)
 
 if __name__ == "__main__":
-    
-    ring_size = 16
-    amount_active_nodes = 4
-    node = None
-    chord = Chord(amount_active_nodes)
+    chord: Chord = Chord(AMOUNT_ACTIVE_NODES)
 
     # Generating the nodes
-    for node_index in range(ring_size):
+    for index in range(RING_SIZE):
         node = Node()
-        node.setKey(node_index)
-        node.setValue(f"Node {node_index}")
-        chord.addNode(node)
-    
+        node.set_key(index)
+        node.set_value(files[index])
+        chord.add_node(node)
+
     # Starting the system
     chord.start()
-    chord.printRing()
+    chord.print()
