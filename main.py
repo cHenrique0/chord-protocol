@@ -19,4 +19,4 @@ if __name__ == "__main__":
 
     # Starting the system
     chord.start()
-    chord.print()
+    # chord.print()

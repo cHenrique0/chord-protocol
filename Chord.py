@@ -26,12 +26,47 @@ class Chord:
     def add_node(self, node: Node) -> None:
         self.__ring.append(node)
 
+    def get_next_node_key(self, key: int) -> int:
+        return self.__ring[key].get_next_node()
+
+    """public int retornarChave(Map associados, String valor) {
+        // Se não encontrar: retorna -1
+        int chave = -1;
+        Set<Map.Entry<Integer, String>> pares = associados.entrySet();
+        for (Map.Entry<Integer, String> par : pares) {
+            if ((String)par.getValue().equals(valor)) {
+                chave = par.getKey();
+            }
+        }
+        return chave;
+    }
+    """
+
+    def find(self, key: int, value: str) -> Node | int:
+        node: Node
+        associated_nodes = {}
+        node_index = key
+        next_node = 0
+
+        for index in range(1, self.__amount_active_nodes):
+            next_node = self.get_next_node_key(node_index)
+            node = self.__ring[next_node]
+            associated_nodes = node.get_associated_keys()
+
+            # if associados.containsValue(valorBuscado)
+            if associated_nodes[index] == value:
+                return self.get_node_key(associated_nodes, value)
+
+            node_index = next_node
+
+        return -1
+
     def set_associated_nodes(self) -> None:
         associated_nodes = {}
         first_node = -1
-        # end = 0
+        end = 0
 
-        for node_index in range(len(self.__ring) - 1, -1, -1):
+        for node_index in range(len(self.__ring) - 1, end, -1):
 
             node = self.__ring[node_index]
 
@@ -45,10 +80,10 @@ class Chord:
                 associated_nodes.update({node.get_key(): node.get_value()})
 
             if node_index == 0:
-                # end = first_node+1
                 node_index = len(self.__ring)
+                end = first_node + 1
 
-    def next_node(self):
+    def next_node(self) -> None:
         previous_node = -1
         first_node = -1
 
