@@ -23,7 +23,6 @@ class Utils:
         try:
             for file in os.listdir(path):
                 self.__files.append(file)
-            print(self.__files)
         except FileNotFoundError as err:
             print(err)
 

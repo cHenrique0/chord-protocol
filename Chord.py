@@ -42,9 +42,7 @@ class Chord:
                     first_node = node_index
 
             if first_node >= 0:
-                print(associated_nodes)
                 associated_nodes.update({node.get_key(): node.get_value()})
-                print(associated_nodes)
 
             if node_index == 0:
                 # end = first_node+1
