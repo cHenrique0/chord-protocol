@@ -63,25 +63,30 @@ class Chord:
 
     def set_associated_nodes(self) -> None:
         associated_nodes = {}
-        first_node = -1
-        end = 0
-
-        for node_index in range(len(self.__ring) - 1, end, -1):
-
-            node = self.__ring[node_index]
-
+        associated_temp = []
+        init_index = -1
+        end_index = -1
+        for _, node in enumerate(self.__ring):
             if node.is_active():
-                node.set_associated_keys(associated_nodes)
-
-                if first_node == -1:
-                    first_node = node_index
-
-            if first_node >= 0:
-                associated_nodes.update({node.get_key(): node.get_value()})
-
-            if node_index == 0:
-                node_index = len(self.__ring)
-                end = first_node + 1
+                next_node = node.get_next_node()
+                if next_node.is_active():
+                    init_index = node.get_key()
+                    end_index = next_node.get_key()
+                    if init_index > end_index:
+                        associated_temp.extend(self.__ring[init_index +
+                                                           1: len(self.__ring)])
+                        associated_temp.extend(
+                            self.__ring[0:end_index+1])
+                        associated_temp.reverse()
+                    else:
+                        associated_temp.extend(self.__ring[init_index +
+                                                           1:end_index+1])
+                associated_nodes.clear()
+                for ass_node in associated_temp:
+                    associated_nodes.update(
+                        {ass_node.get_key(): ass_node.get_value()})
+                next_node.set_associated_keys(associated_nodes)
+            associated_temp.clear()
 
     def next_node(self) -> None:
         previous_node = -1
@@ -91,9 +96,11 @@ class Chord:
             node = self.__ring[node_index]
             if node.is_active():
                 if previous_node >= 0:
-                    self.__ring[previous_node].set_next_node(node.get_key())
+                    # self.__ring[previous_node].set_next_node(node.get_key())
+                    self.__ring[previous_node].set_next_node(node)
                 else:
-                    first_node = node.get_key()
+                    # first_node = node.get_key()
+                    first_node = node
 
                 previous_node = node_index
 
@@ -123,7 +130,7 @@ class Chord:
                 print(f"Key: {node.get_key()}")
                 print(f"Value: {node.get_value()}")
                 print(f"Active: {node.is_active()}")
-                print(f"Next: {node.get_next_node()}")
+                print(f"Next: {node.get_next_node().get_key()}")
                 print(f"Associated Keys: {node.get_associated_keys()}")
                 print("=====================================")
 
