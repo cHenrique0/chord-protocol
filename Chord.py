@@ -1,4 +1,5 @@
 from Node import Node
+from time import sleep
 
 
 class Chord:
@@ -111,6 +112,7 @@ class Chord:
 
         for node in self.__ring:
             if node.is_active():
+                sleep(1)
                 print(f"Key: {node.get_key()}")
                 print(f"Value: {node.get_value()}")
                 print(f"Active: {node.is_active()}")

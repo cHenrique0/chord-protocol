@@ -1,4 +1,5 @@
 import os
+from random import sample
 
 
 class Utils:
@@ -28,26 +29,28 @@ class Utils:
 
         return self.__files
 
-    def generate_random_active_nodes(self, qty_nodes: int) -> list:
+    def generate_random_active_nodes(self, qty_nodes: int, max_node: int) -> list:
         """
         Generate random active nodes
 
         Args:
             qty_nodes (int): quantity of nodes to generate
+            max_node (int): the max node in the ring
 
         Returns:
             list: the list of active nodes
         """
 
-        # for node in range(qty_nodes):
-        #     self.__active_nodes.append(node)
+        self.__active_nodes.extend(sample(range(0, max_node), qty_nodes))
 
         # Generating the nodes in the list manually
-        self.__active_nodes.append(1)
-        self.__active_nodes.append(6)
-        self.__active_nodes.append(11)
-        self.__active_nodes.append(13)
+        # self.__active_nodes.append(1)
+        # self.__active_nodes.append(6)
+        # self.__active_nodes.append(8)
+        # self.__active_nodes.append(11)
+        # self.__active_nodes.append(13)
 
+        print(self.__active_nodes)
         return self.__active_nodes
 
     def get_active_nodes(self) -> list:
