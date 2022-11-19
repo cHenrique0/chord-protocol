@@ -54,24 +54,16 @@ class Chord:
     }
     """
 
-    def find(self, key: int, value: str) -> Node | int:
-        node: Node
-        associated_nodes = {}
-        node_index = key
-        next_node = 0
+    def find(self, value: str) -> tuple[Node, list[Node]] | None:
 
-        for index in range(1, self.__amount_active_nodes):
-            next_node = self.get_next_node_key(node_index)
-            node = self.__ring[next_node]
-            associated_nodes = node.get_associated_keys()
+        searched_nodes: list[Node] = []
 
-            # if associados.containsValue(valorBuscado)
-            if associated_nodes[index] == value:
-                return self.get_node_key(associated_nodes, value)
-
-            node_index = next_node
-
-        return -1
+        for _, node in enumerate(self.__ring):
+            if node.is_active():
+                searched_nodes.append(node)
+                if node.get_value() == value:
+                    return (node, searched_nodes)
+        return None
 
     def set_associated_nodes(self) -> None:
         associated_nodes = {}
