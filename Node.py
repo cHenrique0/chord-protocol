@@ -8,7 +8,7 @@ class Node:
         self.__value: str = ""
         self.__associated_keys: dict = {}
         self.__active_node: bool = False
-        self.__next_node: int = -1
+        self.__next_node: __class__
 
     def get_key(self) -> int:
         """
@@ -62,7 +62,7 @@ class Node:
         Args:
             associated_keys (dict): a dictionary with the keys to associate with the node
         """
-        self.__associated_keys = associated_keys
+        self.__associated_keys.update(associated_keys)
 
     def is_active(self) -> bool:
         """
@@ -82,7 +82,7 @@ class Node:
         """
         self.__active_node = active
 
-    def get_next_node(self) -> int:
+    def get_next_node(self):
         """
         Getting the next node
 
@@ -91,7 +91,7 @@ class Node:
         """
         return self.__next_node
 
-    def set_next_node(self, next_node: int) -> None:
+    def set_next_node(self, next_node) -> None:
         """
         Adding the next node
 
