@@ -3,11 +3,15 @@ from Node import Node
 from Chord import Chord
 from Utils import Utils
 
-# Generating the nodes
+# Setting for Chord Ring
 RING_SIZE = 16
 AMOUNT_ACTIVE_NODES = 6
+NODES = (1, 4, 7, 12, 15)
+
+# Generating the nodes
 random_active_nodes = Utils().generate_random_active_nodes(
     AMOUNT_ACTIVE_NODES, RING_SIZE)
+active_nodes = Utils().generate_active_nodes(NODES)
 
 # Path to the files
 PATH = "./data"
@@ -17,7 +21,7 @@ files = Utils().load_files(PATH)
 # Main
 if __name__ == "__main__":
     # Initializing the chord ring
-    chord: Chord = Chord(random_active_nodes)
+    chord: Chord = Chord(active_nodes)
 
     # Creating the nodes
     for index in range(RING_SIZE):
@@ -42,10 +46,10 @@ if __name__ == "__main__":
 
     SEARCH_RESULT = chord.find(VALUE)
     print(f"\n> SEARCHING FOR: {VALUE}")
-    sleep(1)
 
     if SEARCH_RESULT is not None:
 
+        sleep(1)
         FOUND_NODE = SEARCH_RESULT[0]
         SEARCHED_NODES = SEARCH_RESULT[1]
 

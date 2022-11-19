@@ -29,6 +29,27 @@ class Utils:
 
         return self.__files
 
+    def generate_active_nodes(self, active_nodes: tuple) -> list:
+        """
+        Generate the active nodes
+
+        Args:
+            active_nodes (tuple): the tuple with the active nodes
+
+        Returns:
+            list: the list with the active nodes
+        """
+
+        self.__active_nodes.extend(active_nodes)
+
+        # Generating the nodes in the list manually
+        # self.__active_nodes.append(1)
+        # self.__active_nodes.append(6)
+        # self.__active_nodes.append(11)
+        # self.__active_nodes.append(13)
+
+        return self.__active_nodes
+
     def generate_random_active_nodes(self, qty_nodes: int, max_node: int) -> list:
         """
         Generate random active nodes
@@ -42,13 +63,6 @@ class Utils:
         """
 
         self.__active_nodes.extend(sample(range(0, max_node), qty_nodes))
-
-        # Generating the nodes in the list manually
-        # self.__active_nodes.append(1)
-        # self.__active_nodes.append(6)
-        # self.__active_nodes.append(8)
-        # self.__active_nodes.append(11)
-        # self.__active_nodes.append(13)
 
         print(self.__active_nodes)
         return self.__active_nodes
