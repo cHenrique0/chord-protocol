@@ -1,12 +1,12 @@
 from Node import Node
-from Utils import Utils
 
 
 class Chord:
 
-    def __init__(self, active_nodes: int) -> None:
+    def __init__(self, active_nodes: list[int]) -> None:
         self.__ring: list[Node] = []
-        self.__amount_active_nodes: int = active_nodes
+        self.__amount_active_nodes: int = len(active_nodes)
+        self.__active_nodes: list[int] = active_nodes
 
     def get_ring(self) -> list:
         return self.__ring
@@ -41,19 +41,6 @@ class Chord:
     def get_next_node_key(self, key: int) -> int:
         return self.__ring[key].get_key()
 
-    """public int retornarChave(Map associados, String valor) {
-        // Se não encontrar: retorna -1
-        int chave = -1;
-        Set<Map.Entry<Integer, String>> pares = associados.entrySet();
-        for (Map.Entry<Integer, String> par : pares) {
-            if ((String)par.getValue().equals(valor)) {
-                chave = par.getKey();
-            }
-        }
-        return chave;
-    }
-    """
-
     def find(self, value: str) -> tuple[Node, list[Node]] | None:
 
         searched_nodes: list[Node] = []
@@ -81,7 +68,6 @@ class Chord:
                                                            1: len(self.__ring)])
                         associated_temp.extend(
                             self.__ring[0:end_index+1])
-                        associated_temp.reverse()
                     else:
                         associated_temp.extend(self.__ring[init_index +
                                                            1:end_index+1])
@@ -107,11 +93,9 @@ class Chord:
         self.__ring[previous_node].set_next_node(first_node)
 
     def activate_initial_nodes(self) -> None:
-        random_active_nodes: list[int] = Utils(
-        ).generate_random_active_nodes(self.__amount_active_nodes)
 
-        for index, _ in enumerate(random_active_nodes):
-            node_index = random_active_nodes[index]
+        for index, _ in enumerate(self.__active_nodes):
+            node_index = self.__active_nodes[index]
             node = self.__ring[node_index]
             node.active(True)
 
@@ -121,6 +105,10 @@ class Chord:
         self.set_associated_nodes()
 
     def print(self) -> None:
+
+        print(f"Active Nodes: {self.get_amount_active_nodes()}")
+        print("=====================================")
+
         for node in self.__ring:
             if node.is_active():
                 print(f"Key: {node.get_key()}")
@@ -129,6 +117,3 @@ class Chord:
                 print(f"Next: {node.get_next_node().get_key()}")
                 print(f"Associated Keys: {node.get_associated_keys()}")
                 print("=====================================")
-
-        print(f"Active Nodes: {self.get_amount_active_nodes()}")
-        print("=====================================")
