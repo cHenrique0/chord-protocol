@@ -27,7 +27,7 @@ class Chord:
         self.__ring.append(node)
 
     def get_next_node_key(self, key: int) -> int:
-        return self.__ring[key].get_next_node()
+        return self.__ring[key].get_key()
 
     """public int retornarChave(Map associados, String valor) {
         // Se não encontrar: retorna -1
@@ -92,16 +92,12 @@ class Chord:
         previous_node = -1
         first_node = -1
 
-        for node_index in range(len(self.__ring)):
-            node = self.__ring[node_index]
+        for node_index, node in enumerate(self.__ring):
             if node.is_active():
                 if previous_node >= 0:
-                    # self.__ring[previous_node].set_next_node(node.get_key())
                     self.__ring[previous_node].set_next_node(node)
                 else:
-                    # first_node = node.get_key()
                     first_node = node
-
                 previous_node = node_index
 
         self.__ring[previous_node].set_next_node(first_node)
@@ -109,12 +105,8 @@ class Chord:
     def activate_initial_nodes(self) -> None:
         random_active_nodes: list[int] = Utils(
         ).generate_random_active_nodes(self.__amount_active_nodes)
-        node = Node()
-        # for e in enumerate(random_active_nodes):
-        #     for i in e:
-        #         node = self.__ring[i]
-        #         node.active(True)
-        for index in range(len(random_active_nodes)):
+
+        for index, _ in enumerate(random_active_nodes):
             node_index = random_active_nodes[index]
             node = self.__ring[node_index]
             node.active(True)
