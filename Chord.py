@@ -14,6 +14,18 @@ class Chord:
     def set_ring(self, ring: list) -> None:
         self.__ring = ring
 
+    def print_node(self, key: int) -> None:
+        node = self.__ring[key]
+        print(f"Key: {node.get_key()}")
+        print(f"Value: {node.get_value()}")
+        print(f"Active: {node.is_active()}")
+        if node.is_active():
+            print(f"Next: {node.get_next_node().get_key()}")
+            print(f"Associated Keys: {node.get_associated_keys()}")
+        else:
+            print("Next: {}")
+            print("Associated Keys: {}")
+
     def get_amount_active_nodes(self) -> int:
         return self.__amount_active_nodes
 
