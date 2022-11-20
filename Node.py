@@ -110,11 +110,11 @@ class Node:
         """
         return self.__finger_table
 
-    def set_finger_table(self, node_key: int) -> None:
+    def set_finger_table(self, node_keys: list[int]) -> None:
         """
         Setting the finger table
 
         Args:
             finger_table (list[int]): the keys for the nodes
         """
-        self.__finger_table.append(node_key)
+        self.__finger_table.extend(node_keys)

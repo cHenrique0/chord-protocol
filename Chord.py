@@ -142,7 +142,8 @@ class Chord:
                     node = tmp_node
                     next_node_active = tmp_next_node_active
                 table.update({index: node_ftp.copy()})
-        print(table)
+                node.set_finger_table(node_ftp)
+        # print(table)
 
     def print_finger_table(self) -> None:
         for _, node in enumerate(self.__ring):
