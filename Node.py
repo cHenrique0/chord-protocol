@@ -8,7 +8,8 @@ class Node:
         self.__value: str = ""
         self.__associated_keys: dict = {}
         self.__active_node: bool = False
-        self.__next_node: __class__
+        self.__next_node: Node
+        self.__finger_table: list[int] = []
 
     def get_key(self) -> int:
         """
@@ -99,3 +100,21 @@ class Node:
             next_node (int): the next node
         """
         self.__next_node = next_node
+
+    def get_finger_table(self) -> list[int]:
+        """
+        Getting the finger table
+
+        Returns:
+            list[int]: the finger table for the node
+        """
+        return self.__finger_table
+
+    def set_finger_table(self, node_key: int) -> None:
+        """
+        Setting the finger table
+
+        Args:
+            finger_table (list[int]): the keys for the nodes
+        """
+        self.__finger_table.append(node_key)

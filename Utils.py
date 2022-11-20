@@ -64,7 +64,7 @@ class Utils:
 
         self.__active_nodes.extend(sample(range(0, max_node), qty_nodes))
 
-        print(self.__active_nodes)
+        # print(self.__active_nodes)
         return self.__active_nodes
 
     def get_active_nodes(self) -> list:
