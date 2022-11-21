@@ -10,20 +10,23 @@ class Chord:
         self.__active_nodes: list[int] = active_nodes
         self.__searched_nodes: list[Node] = []
 
-    def get_ring(self) -> list:
+    def get_ring(self) -> list[Node]:
         return self.__ring
 
-    def set_ring(self, ring: list) -> None:
+    def set_ring(self, ring: list[Node]) -> None:
         self.__ring = ring
 
     def get_node(self, key: int) -> Node:
         return self.__ring[key]
 
     def print_node(self, key: int) -> None:
-        node = self.__ring[key]
+
+        node: Node = self.__ring[key]
+
         print(f"Key: {node.get_key()}")
         print(f"Value: {node.get_value()}")
         print(f"Active: {node.is_active()}")
+
         if node.is_active():
             print(f"Next: {node.get_next_node().get_key()}")
             print(f"Associated Keys: {node.get_associated_keys()}")
@@ -48,8 +51,8 @@ class Chord:
 
     def find(self, key: int, start: int) -> tuple[Node, list[Node]] | None:
 
-        node = self.get_node(start)
-        finger_table = []
+        node: Node = self.get_node(start)
+        finger_table: list[int] = []
 
         if node not in self.__searched_nodes:
             self.__searched_nodes.append(node)
@@ -78,13 +81,15 @@ class Chord:
         return None
 
     def set_associated_nodes(self) -> None:
-        associated_nodes = {}
-        associated_temp = []
-        start_index = -1
-        end_index = -1
+
+        associated_nodes: dict[int, str] = {}
+        associated_temp: list[Node] = []
+        start_index: int = -1
+        end_index: int = -1
+
         for _, node in enumerate(self.__ring):
             if node.is_active():
-                next_node = node.get_next_node()
+                next_node: Node = node.get_next_node()
                 if next_node.is_active():
                     start_index = node.get_key()
                     end_index = next_node.get_key()
@@ -97,25 +102,29 @@ class Chord:
                         associated_temp.extend(self.__ring[start_index +
                                                            1:end_index+1])
                 associated_nodes.clear()
+
                 for ass_node in associated_temp:
                     associated_nodes.update(
                         {ass_node.get_key(): ass_node.get_value()})
                 next_node.set_associated_keys(associated_nodes)
+
             associated_temp.clear()
 
     def next_node(self) -> None:
-        previous_node = -1
-        first_node = -1
 
-        for node_index, node in enumerate(self.__ring):
+        previous_node: Node | None = None
+        first_node: Node | None = None
+
+        for _, node in enumerate(self.__ring):
             if node.is_active():
-                if previous_node >= 0:
-                    self.__ring[previous_node].set_next_node(node)
+                if previous_node is not None and previous_node.get_key() >= 0:
+                    self.__ring[previous_node.get_key()].set_next_node(node)
                 else:
                     first_node = node
-                previous_node = node_index
+                previous_node = node
 
-        self.__ring[previous_node].set_next_node(first_node)
+        if previous_node is not None and first_node is not None:
+            self.__ring[previous_node.get_key()].set_next_node(first_node)
 
     def activate_initial_nodes(self) -> None:
 
@@ -125,11 +134,15 @@ class Chord:
             node.active(True)
 
     def generate_table(self, table_length: int) -> None:
-        ftp = 0
-        node_ftp = []
-        table = {}
+
+        ftp: int = 0
+        node_ftp: list[int] = []
         next_node: Node
-        for index, node in enumerate(self.__ring):
+        next_node_active: Node
+        tmp_node: Node
+        tmp_next_node_active: Node
+
+        for _, node in enumerate(self.__ring):
             if node.is_active():
                 node_ftp.clear()
                 for table_index in range(1, table_length+1):
@@ -162,11 +175,11 @@ class Chord:
                         node_ftp.append(next_node.get_key())
                     node = tmp_node
                     next_node_active = tmp_next_node_active
-                table.update({index: node_ftp.copy()})
                 node.set_finger_table(node_ftp)
         # print(table)
 
     def print_finger_table(self) -> None:
+
         # for _, node in enumerate(self.__ring):
         for _, node in enumerate(self.__searched_nodes):
             if node.is_active():

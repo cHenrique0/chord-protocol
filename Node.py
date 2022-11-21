@@ -1,3 +1,7 @@
+# for python 3.10: allow use the class name how type hint
+from __future__ import annotations
+
+
 class Node:
     """
     The class that represents a node in the chord ring.
@@ -6,7 +10,7 @@ class Node:
     def __init__(self):
         self.__key: int = 0
         self.__value: str = ""
-        self.__associated_keys: dict = {}
+        self.__associated_keys: dict[int, str] = {}
         self.__active_node: bool = False
         self.__next_node: Node
         self.__finger_table: list[int] = []
@@ -56,7 +60,7 @@ class Node:
         """
         return self.__associated_keys
 
-    def set_associated_keys(self, associated_keys: dict) -> None:
+    def set_associated_keys(self, associated_keys: dict[int, str]) -> None:
         """
         Setting the associated keys for the node
 
@@ -92,7 +96,7 @@ class Node:
         """
         return self.__next_node
 
-    def set_next_node(self, next_node) -> None:
+    def set_next_node(self, next_node: Node) -> None:
         """
         Adding the next node
 

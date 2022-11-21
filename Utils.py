@@ -8,10 +8,10 @@ class Utils:
     """
 
     def __init__(self) -> None:
-        self.__active_nodes: list = []
-        self.__files: list = []
+        self.__active_nodes: list[int] = []
+        self.__files: list[str] = []
 
-    def load_files(self, path: str) -> list:
+    def load_files(self, path: str) -> list[str]:
         """
         Load files from the path
 
@@ -29,7 +29,7 @@ class Utils:
 
         return self.__files
 
-    def generate_active_nodes(self, active_nodes: tuple) -> list:
+    def generate_active_nodes(self, active_nodes: tuple) -> list[int]:
         """
         Generate the active nodes
 
@@ -50,7 +50,7 @@ class Utils:
 
         return self.__active_nodes
 
-    def generate_random_active_nodes(self, qty_nodes: int, max_node: int) -> list:
+    def generate_random_active_nodes(self, qty_nodes: int, max_node: int) -> list[int]:
         """
         Generate random active nodes
 
@@ -67,7 +67,7 @@ class Utils:
         # print(self.__active_nodes)
         return self.__active_nodes
 
-    def get_active_nodes(self) -> list:
+    def get_active_nodes(self) -> list[int]:
         """
         Getting the active nodes
 

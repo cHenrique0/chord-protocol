@@ -56,11 +56,11 @@ if __name__ == "__main__":
     chord.print()
     sleep(1)
 
-    # # Generating the finger table for the active nodes
+    # Generating the finger table for the active nodes
     chord.generate_table(table_length=5)
     sleep(1)
 
-    # # Searching a content
+    # Searching a content
     KEY = int(input("\n> Enter the key to search: ").strip())
     START = int(input("> Enter the start node: ").strip())
     sleep(1)
