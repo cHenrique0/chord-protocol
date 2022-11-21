@@ -45,44 +45,47 @@ if __name__ == "__main__":
     # Starting the system
     chord.start()
     print("Starting the system...")
-    sleep(1)
-
-    # Showing the ring
-    print("\n> Ring:")
-    chord.print()
-    sleep(1)
-
-    # # Searching a content
-    # VALUE = input("\n> Enter the value to search: ")
     # sleep(1)
 
-    # # SEARCH_RESULT = chord.find(VALUE)
-    # print(f"\n> SEARCHING FOR: {VALUE}")
+    # # Showing the ring
+    # print("\n> Ring:")
+    # chord.print()
+    # sleep(1)
 
-    # if SEARCH_RESULT is not None:
-
-    #     sleep(1)
-    #     FOUND_NODE = SEARCH_RESULT[0]
-    #     SEARCHED_NODES = SEARCH_RESULT[1]
-
-    #     print(f"\n> FOUND IN: {FOUND_NODE.get_key()}")
-    #     sleep(1)
-
-    #     print("\n> Node info:")
-    #     chord.print_node(FOUND_NODE.get_key())
-    #     sleep(1)
-
-    #     print("\n> Searched nodes:\n")
-    #     for node in SEARCHED_NODES:
-    #         sleep(1)
-    #         chord.print_node(node.get_key())
-    #         print("=====================================")
-    # else:
-    #     sleep(1)
-    #     print("NOT FOUND")
-
-    # Generating the finger table for the active nodes
+    # # Generating the finger table for the active nodes
     chord.generate_table(table_length=5)
+    # sleep(1)
+
+    # # Searching a content
+    KEY = int(input("\n> Enter the key to search: ").strip())
+    START = int(input("> Enter the start node: ").strip())
+    # sleep(1)
+
+    SEARCH_RESULT = chord.find(KEY, START)
+    print(f"\n> SEARCHING FOR: {KEY}")
+
+    if SEARCH_RESULT is not None:
+
+        # sleep(1)
+        FOUND_NODE = SEARCH_RESULT[0]
+        SEARCHED_NODES = SEARCH_RESULT[1]
+
+        print(f"\n> FOUND IN: {FOUND_NODE.get_key()}")
+        # sleep(1)
+
+        print("\n> Node info:")
+        chord.print_node(FOUND_NODE.get_key())
+        # sleep(1)
+
+        print("\n> Searched nodes:\n")
+        for node in SEARCHED_NODES:
+            # sleep(1)
+            chord.print_node(node.get_key())
+            print("=====================================")
+    else:
+        # sleep(1)
+        print("NOT FOUND")
 
     # Showing the finger table for the active nodes
-    # chord.print_finger_table()
+    print("\n> Finger tables:")
+    chord.print_finger_table()

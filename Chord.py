@@ -1,5 +1,5 @@
-from Node import Node
 from time import sleep
+from Node import Node
 
 
 class Chord:
@@ -45,15 +45,32 @@ class Chord:
     def get_next_node_key(self, key: int) -> int:
         return self.__ring[key].get_key()
 
-    def find(self, value: str) -> tuple[Node, list[Node]] | None:
+    def find(self, key: int, start: int) -> tuple[Node, list[Node]] | None:
 
-        searched_nodes: list[Node] = []
+        node = self.get_node(start)
+        searched_nodes = [node]
+        finger_table = []
+        if node.is_active():
+            if key not in node.get_associated_keys():
+                finger_table.extend(node.get_finger_table())
+                for tab_index, node_key in enumerate(finger_table):
+                    if tab_index == len(finger_table)-1:
+                        searched_nodes.append(self.get_node(node_key))
+                        return self.find(key, node_key)
+                    if node_key < key <= finger_table[tab_index+1]:
+                        searched_nodes.append(self.get_node(node_key))
+                        return self.find(key, node_key)
+                    if key <= finger_table[tab_index + 1]:
+                        searched_nodes.append(self.get_node(
+                            finger_table[tab_index + 1]))
+                        return self.find(key, finger_table[tab_index + 1])
+            if key in node.get_associated_keys():
+                return (node, searched_nodes)
 
-        for _, node in enumerate(self.__ring):
-            if node.is_active():
-                searched_nodes.append(node)
-                if node.get_value() == value:
-                    return (node, searched_nodes)
+        # while not node.is_active():
+        #     start += 1
+        #     node = self.get_node(start)
+
         return None
 
     def set_associated_nodes(self) -> None:
