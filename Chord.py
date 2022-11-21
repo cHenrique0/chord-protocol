@@ -8,6 +8,7 @@ class Chord:
         self.__ring: list[Node] = []
         self.__amount_active_nodes: int = len(active_nodes)
         self.__active_nodes: list[int] = active_nodes
+        self.__searched_nodes: list[Node] = []
 
     def get_ring(self) -> list:
         return self.__ring
@@ -48,28 +49,31 @@ class Chord:
     def find(self, key: int, start: int) -> tuple[Node, list[Node]] | None:
 
         node = self.get_node(start)
-        searched_nodes = [node]
         finger_table = []
+
+        if node not in self.__searched_nodes:
+            self.__searched_nodes.append(node)
+
         if node.is_active():
             if key not in node.get_associated_keys():
                 finger_table.extend(node.get_finger_table())
                 for tab_index, node_key in enumerate(finger_table):
                     if tab_index == len(finger_table)-1:
-                        searched_nodes.append(self.get_node(node_key))
+                        self.__searched_nodes.append(self.get_node(node_key))
                         return self.find(key, node_key)
                     if node_key < key <= finger_table[tab_index+1]:
-                        searched_nodes.append(self.get_node(node_key))
+                        self.__searched_nodes.append(self.get_node(node_key))
                         return self.find(key, node_key)
                     if key <= finger_table[tab_index + 1]:
-                        searched_nodes.append(self.get_node(
+                        self.__searched_nodes.append(self.get_node(
                             finger_table[tab_index + 1]))
                         return self.find(key, finger_table[tab_index + 1])
             if key in node.get_associated_keys():
-                return (node, searched_nodes)
+                return (node, self.__searched_nodes)
 
-        # while not node.is_active():
-        #     start += 1
-        #     node = self.get_node(start)
+        if not node.is_active():
+            start += 1
+            return self.find(key, start)
 
         return None
 
@@ -163,7 +167,8 @@ class Chord:
         # print(table)
 
     def print_finger_table(self) -> None:
-        for _, node in enumerate(self.__ring):
+        # for _, node in enumerate(self.__ring):
+        for _, node in enumerate(self.__searched_nodes):
             if node.is_active():
                 print(f"Node {node.get_key()}: {node.get_finger_table()}")
 
