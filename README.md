@@ -24,5 +24,9 @@ git clone git@github.com:cHenrique0/chord-protocol.git
 
 cd chord-protocol
 
+pip intall --upgrade pip
+
+pip install networkx
+
 python main.py
 ```
