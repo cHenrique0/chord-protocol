@@ -1,5 +1,6 @@
 from time import sleep
 from Node import Node
+from pyvis.network import Network
 
 
 class Chord:
@@ -204,3 +205,26 @@ class Chord:
                 print(f"Next: {node.get_next_node().get_key()}")
                 print(f"Associated Keys: {node.get_associated_keys()}")
                 print("=====================================")
+
+    def show_graph(self) -> None:
+        graph = Network(directed=True)
+
+        for node in self.__ring:
+            if node.is_active():
+                graph.add_node(node.get_key(), label=f"{node.get_key()}")
+            else:
+                graph.add_node(
+                    node.get_key(), label=f"{node.get_key()}", color="#C4C4C4")
+
+        # for node in self.__ring:
+        #     if node.is_active():
+        #         graph.add_edge(node.get_key(), node.get_next_node().get_key())
+
+        for index, _ in enumerate(graph.get_nodes()):
+            if index < self.length()-1:
+                graph.add_edge(index, index+1)
+            else:
+                graph.add_edge(index, 0)
+
+        graph.toggle_drag_nodes(False)
+        graph.show("graph.html")

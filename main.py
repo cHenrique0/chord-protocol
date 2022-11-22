@@ -1,3 +1,4 @@
+import sys
 from time import sleep
 from Node import Node
 from Chord import Chord
@@ -91,5 +92,13 @@ if __name__ == "__main__":
         print("NOT FOUND")
 
     # Showing the finger table for the active nodes
+    sleep(1)
     print("\n> FINGER TABLES:")
     chord.print_finger_table()
+
+    # Showing graph
+    question = input("\n> Do you want to see the graph? (y/n): ").strip()
+    if question == "y":
+        chord.show_graph()
+
+    sys.exit(0)
