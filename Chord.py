@@ -1,6 +1,7 @@
 from time import sleep
 from Node import Node
-from pyvis.network import Network
+import matplotlib.pyplot as plt
+import networkx as nx
 
 
 class Chord:
@@ -207,24 +208,38 @@ class Chord:
                 print("=====================================")
 
     def show_graph(self) -> None:
-        graph = Network(directed=True)
 
-        for node in self.__ring:
-            if node.is_active():
-                graph.add_node(node.get_key(), label=f"{node.get_key()}")
+        # Graph
+        graph = nx.DiGraph()
+        pos = nx.circular_layout(graph)
+
+        # Nodes
+        nodes = [node.get_key() for node in self.__ring]
+        graph.add_nodes_from(nodes)
+
+        # Edges
+        edges = []
+        for index, node in enumerate(nodes):
+            if index < len(nodes) - 1:
+                edges.append((node, index+1))
             else:
-                graph.add_node(
-                    node.get_key(), label=f"{node.get_key()}", color="#C4C4C4")
+                edges.append((node, 0))
+        graph.add_edges_from(edges)
 
-        # for node in self.__ring:
-        #     if node.is_active():
-        #         graph.add_edge(node.get_key(), node.get_next_node().get_key())
+        # add extra edges (path through searched nodes)
+        searched_nodes = [node.get_key() for node in self.__searched_nodes]
+        for index, node in enumerate(searched_nodes):
+            if index < len(searched_nodes) - 1:
+                graph.add_edge(node, searched_nodes[index+1])
 
-        for index, _ in enumerate(graph.get_nodes()):
-            if index < self.length()-1:
-                graph.add_edge(index, index+1)
-            else:
-                graph.add_edge(index, 0)
+        # Labels
+        labels = {}
+        for index, node in enumerate(nodes):
+            labels[index] = f"{node}"
 
-        graph.toggle_drag_nodes(False)
-        graph.show("graph.html")
+        opitions = {"node_size": 500,
+                    "font_size": 16, "font_color": "white"}
+        nx.draw_circular(graph, with_labels=True, **opitions)
+
+        plt.axis("off")
+        plt.show()
