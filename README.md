@@ -26,7 +26,7 @@ cd chord-protocol
 
 pip intall --upgrade pip
 
-pip install networkx
+pip install networkx matplotlib
 
 python main.py
 ```
