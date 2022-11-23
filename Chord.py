@@ -211,11 +211,10 @@ class Chord:
 
         # Graph
         graph = nx.DiGraph()
-        pos = nx.circular_layout(graph)
 
         # Nodes
         nodes = [node.get_key() for node in self.__ring]
-        graph.add_nodes_from(nodes)
+        # graph.add_nodes_from(nodes)
 
         # Edges
         edges = []
@@ -226,20 +225,55 @@ class Chord:
                 edges.append((node, 0))
         graph.add_edges_from(edges)
 
-        # add extra edges (path through searched nodes)
+        pos = nx.circular_layout(graph)
+
+        # Add extra edges (path through searched nodes)
         searched_nodes = [node.get_key() for node in self.__searched_nodes]
+        searched_nodes_edges = []
         for index, node in enumerate(searched_nodes):
             if index < len(searched_nodes) - 1:
-                graph.add_edge(node, searched_nodes[index+1])
+                searched_nodes_edges.append((node, searched_nodes[index+1]))
 
         # Labels
         labels = {}
         for index, node in enumerate(nodes):
             labels[index] = f"{node}"
 
-        opitions = {"node_size": 500,
-                    "font_size": 16, "font_color": "white"}
-        nx.draw_circular(graph, with_labels=True, **opitions)
+        # Drawing the active nodes
+        active_nodes = [node.get_key()
+                        for node in self.__ring if node.is_active()]
+        nx.draw_networkx_nodes(graph, pos,
+                               nodelist=active_nodes,
+                               node_color='blue',
+                               node_size=500,
+                               alpha=0.5)
+
+        # Drawing the other nodes
+        not_active_nodes = [node.get_key()
+                            for node in self.__ring if not node.is_active()]
+        nx.draw_networkx_nodes(graph, pos,
+                               nodelist=not_active_nodes,
+                               node_color='gray',
+                               node_size=500,
+                               alpha=0.5)
+
+        # Drawing the node that contains the searched key
+        nx.draw_networkx_nodes(graph, pos,
+                               nodelist=searched_nodes[len(
+                                   searched_nodes)-1::],
+                               node_color='r',
+                               node_size=500,
+                               alpha=0.5)
+
+        # Drawing the edges
+        nx.draw_networkx_edges(graph, pos, edgelist=edges)
+        nx.draw_networkx_edges(
+            graph, pos, edgelist=searched_nodes_edges, edge_color="r")
+
+        # Drawing the labels
+        for _, node in enumerate(graph.nodes()):
+            nx.draw_networkx_labels(
+                graph, pos, font_size=12, font_color='k', alpha=0.5)
 
         plt.axis("off")
         plt.show()
